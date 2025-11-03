@@ -4,7 +4,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="mb-0">Tambah Admin Akun</h4>
+                        <h4 class="mb-0">Edit Pengguna</h4>
                     </div>
                     <div class="card-body">
                         @if ($errors->any())
@@ -18,13 +18,14 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('admin.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('pengguna.update', $pengguna->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
+                            @method('PUT')
 
                             <div class="mb-3">
                                 <label for="name" class="form-label">Nama</label>
                                 <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                    id="name" name="name" value="{{ old('name') }}"
+                                    id="name" name="name" value="{{ old('name', $pengguna->name) }}"
                                     placeholder="Masukkan nama lengkap" required>
                                 @error('name')
                                     <span class="invalid-feedback">{{ $message }}</span>
@@ -34,7 +35,7 @@
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                    id="email" name="email" value="{{ old('email') }}"
+                                    id="email" name="email" value="{{ old('email', $pengguna->email) }}"
                                     placeholder="Masukkan email" required>
                                 @error('email')
                                     <span class="invalid-feedback">{{ $message }}</span>
@@ -42,10 +43,9 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
+                                <label for="password" class="form-label">Password (Opsional)</label>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                    id="password" name="password" placeholder="Masukkan password (minimal 8 karakter)"
-                                    required>
+                                    id="password" name="password" placeholder="Biarkan kosong jika tidak ingin mengubah password">
                                 @error('password')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
@@ -54,11 +54,35 @@
                             <div class="mb-3">
                                 <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
                                 <input type="password" class="form-control" id="password_confirmation"
-                                    name="password_confirmation" placeholder="Konfirmasi password" required>
+                                    name="password_confirmation" placeholder="Konfirmasi password baru">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="role" class="form-label">Role</label>
+                                <select class="form-select @error('role') is-invalid @enderror" id="role"
+                                    name="role" required>
+                                    <option value="">Pilih Role</option>
+                                    <option value="{{ \App\Enum\UserRole::PUBLIC->value }}"
+                                        @selected(old('role', $pengguna->role->value) == \App\Enum\UserRole::PUBLIC->value)>
+                                        Pengguna
+                                    </option>
+                                    <option value="{{ \App\Enum\UserRole::BENGKEL->value }}"
+                                        @selected(old('role', $pengguna->role->value) == \App\Enum\UserRole::BENGKEL->value)>
+                                        Bengkel
+                                    </option>
+                                </select>
+                                @error('role')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="avatar" class="form-label">Avatar (Opsional)</label>
+                                @if($pengguna->avatar)
+                                    <div class="mb-2">
+                                        <img src="{{ $pengguna->avatar }}" alt="Avatar" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                                    </div>
+                                @endif
                                 <input type="file" class="form-control @error('avatar') is-invalid @enderror"
                                     id="avatar" name="avatar" accept="image/jpeg,image/png,image/jpg">
                                 <small class="form-text text-muted">Format: JPG, JPEG, PNG (Maksimal 2MB)</small>
@@ -68,8 +92,8 @@
                             </div>
 
                             <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-primary">Simpan</button>
-                                <a href="{{ route('admin.akun') }}" class="btn btn-secondary">Batal</a>
+                                <button type="submit" class="btn btn-primary">Perbarui</button>
+                                <a href="{{ route('pengguna.index') }}" class="btn btn-secondary">Batal</a>
                             </div>
                         </form>
                     </div>

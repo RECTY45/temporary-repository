@@ -4,7 +4,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="mb-0">Tambah Admin Akun</h4>
+                        <h4 class="mb-0">Tambah Pengguna</h4>
                     </div>
                     <div class="card-body">
                         @if ($errors->any())
@@ -18,7 +18,7 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('admin.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('pengguna.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="mb-3">
@@ -58,6 +58,25 @@
                             </div>
 
                             <div class="mb-3">
+                                <label for="role" class="form-label">Role</label>
+                                <select class="form-select @error('role') is-invalid @enderror" id="role"
+                                    name="role" required>
+                                    <option value="">Pilih Role</option>
+                                    <option value="{{ \App\Enum\UserRole::PUBLIC->value }}"
+                                        @selected(old('role') == \App\Enum\UserRole::PUBLIC->value)>
+                                        Pengguna
+                                    </option>
+                                    <option value="{{ \App\Enum\UserRole::BENGKEL->value }}"
+                                        @selected(old('role') == \App\Enum\UserRole::BENGKEL->value)>
+                                        Bengkel
+                                    </option>
+                                </select>
+                                @error('role')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="avatar" class="form-label">Avatar (Opsional)</label>
                                 <input type="file" class="form-control @error('avatar') is-invalid @enderror"
                                     id="avatar" name="avatar" accept="image/jpeg,image/png,image/jpg">
@@ -69,7 +88,7 @@
 
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">Simpan</button>
-                                <a href="{{ route('admin.akun') }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('pengguna.index') }}" class="btn btn-secondary">Batal</a>
                             </div>
                         </form>
                     </div>

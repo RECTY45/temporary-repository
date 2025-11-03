@@ -17,11 +17,12 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, string $role): Response
     {
         $user = $request->user();
-        $requiredRole = UserRole::tryFrom($role);
 
         if (!$user) {
             return redirect()->route('login');
         }
+
+        $requiredRole = UserRole::tryFrom($role) ?? UserRole::{strtoupper($role)};
 
         // Jika role tidak cocok
         if ($user->role !== $requiredRole) {

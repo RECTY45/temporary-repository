@@ -3,7 +3,7 @@
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                 <h6 class="mb-0">Daftar Akun Admin</h6>
-                <a href="{{ route('admin.create') }}" class="btn btn-light btn-sm text-primary">
+                <a href="{{ route('pengguna.create') }}" class="btn btn-light btn-sm text-primary">
                     <i class="bi bi-plus-circle"></i> Tambah Admin
                 </a>
             </div>
@@ -13,7 +13,7 @@
                     <div role="complementary" class="gridjs gridjs-container" style="width: 100%;">
                         <div class="gridjs-head">
                             <div class="gridjs-search">
-                                <input type="search" placeholder="Cari admin..." aria-label="Cari admin..."
+                                <input type="search" class="form-control" placeholder="Cari admin..." aria-label="Cari admin..."
                                     class="gridjs-input gridjs-search-input" onkeyup="filterTable(this.value)">
                             </div>
                         </div>
@@ -35,21 +35,22 @@
                                         <tr class="gridjs-tr">
                                             <td class="gridjs-td">{{ $loop->iteration }}</td>
                                             <td class="gridjs-td">
-                                                @if ($user->avatar)
-                                                    <img src="{{ $user->avatar }}" alt="Avatar"
-                                                        class="rounded-circle" width="40" height="40">
-                                                @else
-                                                    <img src="https://placehold.co/100x100" alt="Default Avatar"
-                                                        class="rounded-circle" width="40" height="40">
+                                                <img src="{{ $user->avatar }}" alt="{{ $user->name }}"
+                                                    class="rounded-circle" width="40" height="40">
+                                            </td>
+                                            <td class="gridjs-td">{{ $user->name }}</td>
+                                            <td class="gridjs-td">{{ $user->email }}</td>
+                                            <td class="gridjs-td">
+                                                @if(\App\Enum\UserRole::PUBLIC->value == $user->role->value)
+                                                    Pengguna
+                                                @elseif(\App\Enum\UserRole::BENGKEL->value == $user->role->value)
+                                                    Bengkel
                                                 @endif
                                             </td>
-                                            <td class="gridjs-td">{{ $user->nama }}</td>
-                                            <td class="gridjs-td">{{ $user->email }}</td>
-                                            <td class="gridjs-td">{{ $user->role }}</td>
                                             <td class="gridjs-td text-center">
-                                                <a href="{{ route('admin.edit', $user->id) }}"
+                                                <a href="{{ route('pengguna.edit', $user->id) }}"
                                                     class="btn btn-warning btn-sm">Edit</a>
-                                                <form action="{{ route('admin.destroy', $user->id) }}"
+                                                <form action="{{ route('pengguna.destroy', $user->id) }}"
                                                     method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')

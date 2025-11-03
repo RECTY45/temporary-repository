@@ -61,7 +61,7 @@
                 aria-expanded="false"
             >
                 <x-img
-                    src="dashboard/assets/images/user-45.png"
+                    src="{{ auth()->user()->avatar ?? 'dashboard/assets/images/user-45.png' }}"
                     loading="lazy"
                     alt="en"
                     class="object-fit-cover size-8 rounded"
@@ -70,7 +70,7 @@
             <div class="dropdown-menu profile-dropdown-menu p-4">
                 <div class="d-flex align-items-center gap-2">
                     <x-img
-                        src="dashboard/assets/images/user-45.png"
+                        src="{{ auth()->user()->avatar ?? 'dashboard/assets/images/user-45.png' }}"
                         loading="lazy"
                         alt=""
                         class="rounded-circle size-10 flex-shrink-0"

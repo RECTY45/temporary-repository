@@ -13,17 +13,17 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function indexAdmin()
+    public function index()
     {
         return view('akun.admin.index', [
-            'users' => User::where('role', UserRole::ADMIN->value),
+            'users' => User::where('role', UserRole::ADMIN->value)->get(),
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function createAdmin()
+    public function create()
     {
         return view('akun.admin.create', [
             'roles' => UserRole::ADMIN->value,
@@ -33,22 +33,27 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function storeAdmin(Request $request)
+    public function store(Request $request)
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:akun.admin',
+            'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => ['required', new Enum(UserRole::ADMIN->value)],
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $validatedData['password'] = bcrypt($validatedData['password']);
+        $validatedData['password'] = Hash::make($validatedData['password']);
+        $validatedData['role'] = UserRole::ADMIN;
+
+        if ($request->hasFile('avatar')) {
+            $validatedData['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
 
         User::create($validatedData);
 
-        return redirect()->route('akun.admin.index')->with('success', 'Akun Admin Berhasil Dibuat.');
+        return redirect()->route('admin.akun')->with('success', 'Akun Admin Berhasil Dibuat.');
     }
-
+    
     /**
      * Display the specified resource.
      */
@@ -60,24 +65,22 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function editAdmin(User $user)
+    public function edit(User $akun)
     {
         return view('akun.admin.update', [
-            'user' => $user,
-            'roles' => UserRole::ADMIN->value,
+            'user' => $akun,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function updateAdmin(Request $request, User $user)
+    public function update(Request $request, User $akun)
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:akun.admin,email,' . $user->id,
+            'email' => 'required|string|email|max:255|unique:users,email,' . $akun->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'role' => ['required', new Enum(UserRole::class)],
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -91,16 +94,20 @@ class UserController extends Controller
             unset($validatedData['password']);
         }
 
-        $user->update($validatedData);
+        $validatedData['role'] = UserRole::ADMIN;
 
-        return redirect()->route('akun.admin.index')->with('success', 'User berhasil diperbarui.');
+        $akun->update($validatedData);
+
+        return redirect()->route('admin.akun')->with('success', 'User berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(User $akun)
     {
-        //
+        $akun->delete();
+
+        return redirect()->route('admin.akun')->with('success', 'User berhasil dihapus.');
     }
 }
