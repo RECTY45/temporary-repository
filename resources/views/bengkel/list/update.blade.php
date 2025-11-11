@@ -63,8 +63,8 @@
                                         <label for="latitude" class="form-label">Latitude</label>
                                         <input type="text"
                                             class="form-control @error('latitude') is-invalid @enderror" id="latitude"
-                                            name="latitude" value="{{ old('latitude', $bengkel->latitude) }}" placeholder="Contoh: -6.2088"
-                                            required>
+                                            name="latitude" value="{{ old('latitude', $bengkel->latitude) }}"
+                                            placeholder="Contoh: -6.2088" required>
                                         @error('latitude')
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
@@ -100,7 +100,9 @@
                                         <label for="open_time" class="form-label">Jam Buka</label>
                                         <input type="time"
                                             class="form-control @error('open_time') is-invalid @enderror" id="open_time"
-                                            name="open_time" value="{{ old('open_time', $bengkel->open_time->format('H:i')) }}" required>
+                                            name="open_time"
+                                            value="{{ old('open_time', $bengkel->open_time->format('H:i')) }}"
+                                            required>
                                         @error('open_time')
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
@@ -111,12 +113,22 @@
                                         <label for="close_time" class="form-label">Jam Tutup</label>
                                         <input type="time"
                                             class="form-control @error('close_time') is-invalid @enderror"
-                                            id="close_time" name="close_time" value="{{ old('close_time', $bengkel->close_time->format('H:i')) }}" required>
+                                            id="close_time" name="close_time"
+                                            value="{{ old('close_time', $bengkel->close_time->format('H:i')) }}"
+                                            required>
                                         @error('close_time')
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
                                 </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Keterangan</label>
+                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                                    rows="3" placeholder="Tambahkan keterangan atau deskripsi tentang bengkel">{{ old('description', $bengkel->description) }}</textarea>
+                                @error('description')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="mb-3 form-check">

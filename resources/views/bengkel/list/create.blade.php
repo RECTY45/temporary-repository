@@ -118,6 +118,17 @@
                                 </div>
                             </div>
 
+                            {{-- 🔹 Tambahan field Keterangan di sini --}}
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Keterangan</label>
+                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                                    rows="3" placeholder="Tambahkan keterangan atau deskripsi tentang bengkel">{{ old('description') }}</textarea>
+                                @error('description')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            {{-- 🔹 End of Keterangan --}}
+
                             <div class="mb-3 form-check">
                                 <input type="checkbox" class="form-check-input" id="is_verified" name="is_verified"
                                     value="1" @checked(old('is_verified'))>

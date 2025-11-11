@@ -29,6 +29,7 @@ class BengkelController extends Controller
             'phone' => 'nullable|string|max:20',
             'open_time' => 'required|date_format:H:i',
             'close_time' => 'required|date_format:H:i',
+            'description' => 'nullable|string',
             'is_verified' => 'boolean',
         ]);
 
@@ -54,6 +55,7 @@ class BengkelController extends Controller
             'phone' => 'nullable|string|max:20',
             'open_time' => 'required|date_format:H:i',
             'close_time' => 'required|date_format:H:i',
+            'description' => 'nullable|string',
             'is_verified' => 'boolean',
         ]);
 
