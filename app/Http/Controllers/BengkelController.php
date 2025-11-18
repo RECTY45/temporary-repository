@@ -56,7 +56,7 @@ class BengkelController extends Controller
             'open_time' => 'required|date_format:H:i',
             'close_time' => 'required|date_format:H:i',
             'description' => 'nullable|string',
-            'is_verified' => 'boolean',
+            'is_verified' => 'nullable|boolean',
         ]);
 
         $bengkel->update($validatedData);

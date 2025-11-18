@@ -33,16 +33,31 @@
                                         <th class="gridjs-th text-center">Aksi</th>
                                     </tr>
                                 </thead>
+
                                 <tbody class="gridjs-tbody" id="adminTableBody">
                                     @forelse ($bengkels as $b)
                                         <tr class="gridjs-tr">
                                             <td class="gridjs-td">{{ $loop->iteration }}</td>
+
                                             <td class="gridjs-td">{{ $b->name }}</td>
+
                                             <td class="gridjs-td">{{ $b->user->name ?? '-' }}</td>
-                                            <td class="gridjs-td">{{ Str::limit($b->address, 30) }}</td>
+
+                                            <td class="gridjs-td" title="{{ $b->address }}">
+                                                {{ Str::limit($b->address, 30) }}
+                                            </td>
+
                                             <td class="gridjs-td">{{ $b->phone ?? '-' }}</td>
-                                            <td class="gridjs-td">{{ $b->open_time->format('H:i') }} - {{ $b->close_time->format('H:i') }}</td>
-                                            <td class="gridjs-td">{{ Str::limit($b->description, 30) }}</td>
+
+                                            <td class="gridjs-td">
+                                                {{ $b->open_time->format('H:i') }} - {{ $b->close_time->format('H:i') }}
+                                            </td>
+
+                                            <!-- 🔽 Kolom Keterangan sudah diperbaiki -->
+                                            <td class="gridjs-td" title="{{ $b->description }}">
+                                                {{ $b->description ? Str::limit($b->description, 30) : '-' }}
+                                            </td>
+
                                             <td class="gridjs-td">
                                                 @if ($b->is_verified)
                                                     <span class="badge bg-success">Terverifikasi</span>
@@ -50,34 +65,41 @@
                                                     <span class="badge bg-warning">Belum Verifikasi</span>
                                                 @endif
                                             </td>
+
                                             <td class="gridjs-td text-center">
                                                 <a href="{{ route('bengkel.list.edit', $b->id) }}"
                                                     class="btn btn-warning btn-sm">Edit</a>
+
                                                 <form action="{{ route('bengkel.list.destroy', $b->id) }}"
                                                     method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
+
                                                     <button type="submit"
                                                         onclick="return confirm('Yakin ingin menghapus bengkel ini?')"
-                                                        class="btn btn-danger btn-sm">Hapus</button>
+                                                        class="btn btn-danger btn-sm">
+                                                        Hapus
+                                                    </button>
                                                 </form>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="8" class="text-center text-muted">Belum ada data bengkel.</td>
+                                            <td colspan="9" class="text-center text-muted">
+                                                Belum ada data bengkel.
+                                            </td>
                                         </tr>
                                     @endforelse
                                 </tbody>
                             </table>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- Script pencarian sederhana --}}
     <script>
         function filterTable(keyword) {
             keyword = keyword.toLowerCase();
