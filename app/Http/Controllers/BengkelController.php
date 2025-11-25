@@ -32,6 +32,7 @@ class BengkelController extends Controller
             'description' => 'nullable|string',
             'is_verified' => 'boolean',
             'service_ids' => 'array',
+            'service_ids.*' => 'exists:services,id',
         ]);
 
         Bengkel::create($validatedData);
