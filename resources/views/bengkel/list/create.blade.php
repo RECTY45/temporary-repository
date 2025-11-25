@@ -145,7 +145,6 @@
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
-
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">Simpan</button>
                                 <a href="{{ route('bengkel.list.index') }}" class="btn btn-secondary">Batal</a>

@@ -17,6 +17,7 @@ class Bengkel extends Model
         'close_time',
         'description',
         'is_verified',
+
     ];
 
     protected $casts = [

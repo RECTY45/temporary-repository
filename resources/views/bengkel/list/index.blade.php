@@ -32,6 +32,7 @@
                                         <th class="gridjs-th">Status</th>
                                         <th class="gridjs-th text-center">Aksi</th>
                                     </tr>
+
                                 </thead>
 
                                 <tbody class="gridjs-tbody" id="adminTableBody">

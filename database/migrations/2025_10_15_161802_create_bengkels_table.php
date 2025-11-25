@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('is_verified')->default(false);
             $table->timestamps();
+
         });
     }
 
