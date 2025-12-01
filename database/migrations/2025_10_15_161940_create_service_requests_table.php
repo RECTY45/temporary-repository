@@ -18,7 +18,6 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Bengkel::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->text('description');
             $table->string('latitude');
             $table->string('longitude');
             $table->enum('status' , ServiceRequestStatus::cases())->default(ServiceRequestStatus::pending);

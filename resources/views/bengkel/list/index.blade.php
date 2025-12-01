@@ -28,7 +28,6 @@
                                         <th class="gridjs-th">Alamat</th>
                                         <th class="gridjs-th">Telepon</th>
                                         <th class="gridjs-th">Jam Operasional</th>
-                                        <th class="gridjs-th">Keterangan</th>
                                         <th class="gridjs-th">Status</th>
                                         <th class="gridjs-th text-center">Aksi</th>
                                     </tr>
@@ -52,11 +51,6 @@
 
                                             <td class="gridjs-td">
                                                 {{ $b->open_time->format('H:i') }} - {{ $b->close_time->format('H:i') }}
-                                            </td>
-
-                                            <!-- 🔽 Kolom Keterangan sudah diperbaiki -->
-                                            <td class="gridjs-td" title="{{ $b->description }}">
-                                                {{ $b->description ? Str::limit($b->description, 30) : '-' }}
                                             </td>
 
                                             <td class="gridjs-td">
