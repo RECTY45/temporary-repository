@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->time('open_time');
             $table->time('close_time');
+            $table->text('description')->nullable();
             $table->boolean('is_verified')->default(false);
             $table->timestamps();
 

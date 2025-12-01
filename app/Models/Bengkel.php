@@ -15,6 +15,7 @@ class Bengkel extends Model
         'phone',
         'open_time',
         'close_time',
+        'description',
         'is_verified',
 
     ];

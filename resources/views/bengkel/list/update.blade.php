@@ -122,14 +122,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Keterangan</label>
-                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
-                                    rows="3" placeholder="Tambahkan keterangan atau deskripsi tentang bengkel">{{ old('description', $bengkel->description) }}</textarea>
-                                @error('description')
-                                    <span class="invalid-feedback">{{ $message }}</span>
-                                @enderror
-                            </div>
 
                             <div class="mb-3 form-check">
                                 <input type="checkbox" class="form-check-input" id="is_verified" name="is_verified"
@@ -137,6 +129,15 @@
                                 <label class="form-check-label" for="is_verified">
                                     Terverifikasi
                                 </label>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Keterangan</label>
+                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                                    rows="3" placeholder="Tambahkan keterangan atau deskripsi tentang bengkel">{{ old('description', $bengkel->description) }}</textarea>
+                                @error('description')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="d-flex gap-2">

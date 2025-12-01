@@ -24,6 +24,7 @@
                                     <tr class="gridjs-tr">
                                         <th class="gridjs-th">#</th>
                                         <th class="gridjs-th">Nama Servis</th>
+                                        <th class="gridjs-th">Deskripsi</th>
                                         <th class="gridjs-th text-center">Aksi</th>
                                     </tr>
                                 </thead>
@@ -32,6 +33,7 @@
                                         <tr class="gridjs-tr">
                                             <td class="gridjs-td">{{ $loop->iteration }}</td>
                                             <td class="gridjs-td">{{ $service->name }}</td>
+                                            <td class="gridjs-td">{{ $service->description ?? '-' }}</td>
                                             <td class="gridjs-td text-center">
                                                 <a href="{{ route('service.edit', $service->id) }}"
                                                     class="btn btn-warning btn-sm">Edit</a>
