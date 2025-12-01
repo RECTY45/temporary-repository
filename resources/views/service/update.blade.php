@@ -33,7 +33,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="description" class="form-label">Deskripsi (Opsional)</label>
+                                <label for="description" class="form-label">Keterangan</label>
                                 <textarea class="form-control @error('description') is-invalid @enderror"
                                     id="description" name="description" rows="3" placeholder="Masukkan deskripsi servis">{{ old('description', $service->description) }}</textarea>
                                 @error('description')

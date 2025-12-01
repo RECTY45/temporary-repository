@@ -24,7 +24,7 @@
                                     <tr class="gridjs-tr">
                                         <th class="gridjs-th">#</th>
                                         <th class="gridjs-th">Nama Servis</th>
-                                        <th class="gridjs-th">Deskripsi</th>
+                                        <th class="gridjs-th">Keterangan</th>
                                         <th class="gridjs-th text-center">Aksi</th>
                                     </tr>
                                 </thead>
