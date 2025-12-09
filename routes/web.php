@@ -11,6 +11,8 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminBengkelController;
 use App\Http\Controllers\BengkelServiceController;
+use App\Http\Controllers\BengkelOwnServiceController;
+use App\Http\Controllers\BengkelProfileController;
 use App\Http\Controllers\ServiceRequestController;
 
 // Authentication
@@ -45,11 +47,14 @@ Route::get('/dashboard-redirect', function () {
     };
 })->middleware('auth')->name('dashboard');
 
-// Admin
-Route::prefix('dashboard/admin')->middleware(['auth', 'role:ADMIN'])->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+// admin/bengkel-services (ADMIN)
+Route::prefix('admin/bengkel-services')->as('admin.bengkel-services.')->middleware(['auth', 'role:ADMIN'])->group(function () {
+    Route::get('/', [BengkelServiceController::class, 'index'])->name('index');
+    Route::get('/{bengkel}/manage', [BengkelServiceController::class, 'manage'])->name('manage');
+    Route::put('/{bengkel}/update', [BengkelServiceController::class, 'update'])->name('update');
 });
 
+// akun/admin (ADMIN)
 Route::prefix('akun/admin')->middleware(['auth', 'role:ADMIN'])->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('admin.akun');
     Route::get('/create', [UserController::class, 'create'])->name('admin.create');
@@ -59,15 +64,7 @@ Route::prefix('akun/admin')->middleware(['auth', 'role:ADMIN'])->group(function 
     Route::delete('delete/{akun}', [UserController::class, 'destroy'])->name('admin.destroy');
 });
 
-Route::prefix('akun/pengguna')->middleware(['auth', 'role:ADMIN'])->group(function () {
-    Route::get('/', [PenggunaController::class, 'index'])->name('pengguna.index');
-    Route::get('/create', [PenggunaController::class, 'create'])->name('pengguna.create');
-    Route::post('/store', [PenggunaController::class, 'store'])->name('pengguna.store');
-    Route::get('/edit/{pengguna}', [PenggunaController::class, 'edit'])->name('pengguna.edit');
-    Route::put('/update/{pengguna}', [PenggunaController::class, 'update'])->name('pengguna.update');
-    Route::delete('/delete/{pengguna}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
-});
-
+// akun/admin-bengkel (ADMIN)
 Route::prefix('akun/admin-bengkel')->middleware(['auth', 'role:ADMIN'])->group(function () {
     Route::get('/', [AdminBengkelController::class, 'index'])->name('admin-bengkel.index');
     Route::get('/create', [AdminBengkelController::class, 'create'])->name('admin-bengkel.create');
@@ -77,6 +74,17 @@ Route::prefix('akun/admin-bengkel')->middleware(['auth', 'role:ADMIN'])->group(f
     Route::delete('/delete/{adminBengkel}', [AdminBengkelController::class, 'destroy'])->name('admin-bengkel.destroy');
 });
 
+// akun/pengguna (ADMIN)
+Route::prefix('akun/pengguna')->middleware(['auth', 'role:ADMIN'])->group(function () {
+    Route::get('/', [PenggunaController::class, 'index'])->name('pengguna.index');
+    Route::get('/create', [PenggunaController::class, 'create'])->name('pengguna.create');
+    Route::post('/store', [PenggunaController::class, 'store'])->name('pengguna.store');
+    Route::get('/edit/{pengguna}', [PenggunaController::class, 'edit'])->name('pengguna.edit');
+    Route::put('/update/{pengguna}', [PenggunaController::class, 'update'])->name('pengguna.update');
+    Route::delete('/delete/{pengguna}', [PenggunaController::class, 'destroy'])->name('pengguna.destroy');
+});
+
+// bengkel (ADMIN)
 Route::prefix('bengkel')->as('bengkel.')->middleware(['auth', 'role:ADMIN'])->group(function () {
     Route::prefix('list')->as('list.')->group(function () {
         Route::get('/', [BengkelController::class, 'index'])->name('index');
@@ -86,11 +94,52 @@ Route::prefix('bengkel')->as('bengkel.')->middleware(['auth', 'role:ADMIN'])->gr
         Route::put('/update/{bengkel}', [BengkelController::class, 'update'])->name('update');
         Route::delete('/delete/{bengkel}', [BengkelController::class, 'destroy'])->name('destroy');
     });
+    Route::prefix('service')->as('service.')->group(function () {
+        Route::get('/', [BengkelServiceController::class, 'index'])->name('index');
+        Route::get('/create', [BengkelServiceController::class, 'create'])->name('create');
+        Route::post('/store', [BengkelServiceController::class, 'store'])->name('store');
+        Route::get('/edit/{bengkelService}', [BengkelServiceController::class, 'edit'])->name('edit');
+        Route::put('/update/{bengkelService}', [BengkelServiceController::class, 'update'])->name('update');
+        Route::delete('/delete/{bengkelService}', [BengkelServiceController::class, 'destroy'])->name('destroy');
+    });
     Route::prefix('map')->as('map.')->group(function () {
         Route::get('/', [BengkelController::class, 'indexMap'])->name('index');
     });
 });
 
+// bengkel/service-requests (BENGKEL)
+Route::prefix('bengkel/service-requests')->as('bengkel.service-requests.')->middleware(['auth', 'role:BENGKEL'])->group(function () {
+    Route::get('/', [ServiceRequestController::class, 'bengkelRequests'])->name('index');
+    Route::get('/{serviceRequest}', [ServiceRequestController::class, 'bengkelRequestDetail'])->name('show');
+    Route::patch('/{serviceRequest}/update-status', [ServiceRequestController::class, 'updateStatus'])->name('update-status');
+});
+
+// dashboard/admin (ADMIN)
+Route::prefix('dashboard/admin')->middleware(['auth', 'role:ADMIN'])->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+});
+
+// dashboard/bengkel (BENGKEL)
+Route::prefix('dashboard/bengkel')->middleware(['auth', 'role:BENGKEL'])->group(function () {
+    Route::get('/', fn() => view('dashboard.bengkel.index'));
+});
+
+// dashboard/public (PUBLIC)
+Route::prefix('dashboard/public')->middleware(['auth', 'role:PUBLIC'])->group(function () {
+    Route::get('/', fn() => view('dashboard.user.index'));
+});
+
+// my-bengkel (BENGKEL)
+Route::prefix('my-bengkel')->as('my-bengkel.')->middleware(['auth', 'role:BENGKEL'])->group(function () {
+    Route::get('/services', [BengkelOwnServiceController::class, 'index'])->name('services.index');
+    Route::get('/services/create', [BengkelOwnServiceController::class, 'create'])->name('services.create');
+    Route::post('/services', [BengkelOwnServiceController::class, 'store'])->name('services.store');
+    Route::get('/history', fn() => view('bengkel.history.index'))->name('history.index');
+    Route::get('/settings', [BengkelProfileController::class, 'edit'])->name('settings.index');
+    Route::put('/settings', [BengkelProfileController::class, 'update'])->name('settings.update');
+});
+
+// service (ADMIN)
 Route::prefix('service')->as('service.')->middleware(['auth', 'role:ADMIN'])->group(function () {
     Route::get('/', [ServiceController::class, 'index'])->name('index');
     Route::get('/create', [ServiceController::class, 'create'])->name('create');
@@ -100,18 +149,7 @@ Route::prefix('service')->as('service.')->middleware(['auth', 'role:ADMIN'])->gr
     Route::delete('/delete/{service}', [ServiceController::class, 'destroy'])->name('destroy');
 });
 
-Route::prefix('admin/bengkel-services')->as('admin.bengkel-services.')->middleware(['auth', 'role:ADMIN'])->group(function () {
-    Route::get('/', [BengkelServiceController::class, 'index'])->name('index');
-    Route::get('/{bengkel}/manage', [BengkelServiceController::class, 'manage'])->name('manage');
-    Route::put('/{bengkel}/update', [BengkelServiceController::class, 'update'])->name('update');
-});
-
-// Public User
-Route::prefix('dashboard/public')->middleware(['auth', 'role:PUBLIC'])->group(function () {
-    Route::get('/', fn() => view('dashboard.user.index'));
-});
-
-// Service Requests for Public Users
+// service-requests (PUBLIC)
 Route::prefix('service-requests')->as('service-requests.')->middleware(['auth', 'role:PUBLIC'])->group(function () {
     Route::get('/bengkels', [ServiceRequestController::class, 'index'])->name('index');
     Route::get('/bengkels/{bengkel}', [ServiceRequestController::class, 'show'])->name('show');
@@ -119,16 +157,4 @@ Route::prefix('service-requests')->as('service-requests.')->middleware(['auth', 
     Route::post('/bengkels/{bengkel}/request', [ServiceRequestController::class, 'store'])->name('store');
     Route::get('/my-requests', [ServiceRequestController::class, 'myRequests'])->name('my-requests');
     Route::patch('/{serviceRequest}/cancel', [ServiceRequestController::class, 'cancel'])->name('cancel');
-});
-
-// Admin Bengkel
-Route::prefix('dashboard/bengkel')->middleware(['auth', 'role:BENGKEL'])->group(function () {
-    Route::get('/', fn() => view('dashboard.bengkel.index'));
-});
-
-// Service Requests for Bengkel
-Route::prefix('bengkel/service-requests')->as('bengkel.service-requests.')->middleware(['auth', 'role:BENGKEL'])->group(function () {
-    Route::get('/', [ServiceRequestController::class, 'bengkelRequests'])->name('index');
-    Route::get('/{serviceRequest}', [ServiceRequestController::class, 'bengkelRequestDetail'])->name('show');
-    Route::patch('/{serviceRequest}/update-status', [ServiceRequestController::class, 'updateStatus'])->name('update-status');
 });

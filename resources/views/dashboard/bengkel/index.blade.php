@@ -30,7 +30,7 @@
                                         </div>
                                         <h5 class="mb-3">Layanan Anda</h5>
                                         <p class="text-sm">Kelola layanan bengkel dan informasi harga Anda.</p>
-                                        <a href="#" class="btn btn-info btn-sm">
+                                        <a href="{{ route('my-bengkel.services.index') }}" class="btn btn-info btn-sm">
                                             Kelola Layanan
                                         </a>
                                     </div>

@@ -163,6 +163,9 @@
             ><i class="fa-solid fa-arrow-up"></i></a>
         </div>
 
+        {{-- JQuery --}}
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
         <!-- Bootstrap JS -->
         <x-script src="assets/js/bootstrap.bundle.min.js"></x-script>
 
